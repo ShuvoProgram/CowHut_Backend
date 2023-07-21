@@ -79,13 +79,20 @@ userSchema.pre('save', async function (next) {
   next()
 })
 
-// userSchema.statics.isUserExist = async function (
-//   id: string
-// ): Promise<IUser | null> {
-//   return await User.findOne(
-//     { id },
-//     { id: 1, password: 1, role: 1, needsPasswordChange: 1 }
-//   )
-// }
+userSchema.statics.isUserExist = async function (
+  id: string
+): Promise<IUser | null> {
+  return await User.findOne(
+    { id },
+    { id: 1, password: 1, role: 1, needsPasswordChange: 1 }
+  )
+}
+
+userSchema.statics.isPasswordMatched = async function (
+  givenPassword: string,
+  savedPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(givenPassword, savedPassword)
+}
 
 export const User = model<IUser, UserModel>('User', userSchema)
