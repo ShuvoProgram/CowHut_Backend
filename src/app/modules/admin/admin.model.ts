@@ -7,6 +7,12 @@ import { AdminModel, IAdmin } from './admin.interface'
 
 const AdminSchema: Schema<IAdmin> = new Schema(
   {
+    id: {
+      type: String,
+      auto: true,
+      unique: true,
+      required: true,
+    },
     phoneNumber: {
       type: String,
       required: true,
@@ -67,5 +73,21 @@ AdminSchema.pre('save', async function (next) {
   }
   next()
 })
+
+AdminSchema.statics.isUserExist = async function (
+  phoneNumber: string
+): Promise<IAdmin | null> {
+  return await Admin.findOne(
+    { phoneNumber },
+    { id: 1, password: 1, role: 1, needsPasswordChange: 1 }
+  )
+}
+
+AdminSchema.statics.isPasswordMatched = async function (
+  givenPassword: string,
+  savedPassword: string
+): Promise<boolean> {
+  return await bcrypt.compare(givenPassword, savedPassword)
+}
 
 export const Admin = model<IAdmin, AdminModel>('Admin', AdminSchema)

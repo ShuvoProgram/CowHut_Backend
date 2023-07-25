@@ -7,11 +7,12 @@ export type UserName = {
   lastName: string
 }
 export type IUser = {
+  id: string
   name: UserName
   role: string
   phoneNumber: string
   password: string
-  needsPasswordChange?: boolean
+  needsPasswordChange: boolean
   address: string
   budget: number
   income: number
@@ -21,7 +22,12 @@ export type IUser = {
 export type UserModel = {
   isUserExist(
     id: string
-  ): Promise<Pick<IUser, 'password' | 'role' | 'phoneNumber'>>
+  ): Promise<
+    Pick<
+      IUser,
+      'id' | 'password' | 'role' | 'phoneNumber' | 'needsPasswordChange'
+    >
+  >
   isPasswordMatched(
     givenPassword: string,
     savedPassword: string

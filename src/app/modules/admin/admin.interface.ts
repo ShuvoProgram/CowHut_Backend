@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { Model, Types } from 'mongoose'
 
 export type UserName = {
@@ -6,14 +7,36 @@ export type UserName = {
 }
 
 export type IAdmin = {
+  id: string
   phoneNumber: string
   name: UserName
   role: string
   password: string
-  needsPasswordChange?: boolean
+  needsPasswordChange: boolean
   passwordChangedAt: Date
   address: string
   admin?: Types.ObjectId | IAdmin
 }
 
-export type AdminModel = Model<IAdmin, Record<string, unknown>>
+export type AdminModel = {
+  isUserExist(
+    id: string
+  ): Promise<
+    Pick<
+      IAdmin,
+      'id' | 'password' | 'role' | 'phoneNumber' | 'needsPasswordChange'
+    >
+  >
+  isPasswordMatched(
+    givenPassword: string,
+    savedPassword: string
+  ): Promise<boolean>
+} & Model<IAdmin>
+
+export type ILoginAdminResponse = {
+  accessToken: string
+  refreshToken?: string
+  needsPasswordChange: boolean
+}
+
+// export type AdminModel = Model<IAdmin, Record<string, unknown>>

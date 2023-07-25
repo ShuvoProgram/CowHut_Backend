@@ -1,9 +1,10 @@
 /* eslint-disable no-console */
 import { Request, Response } from 'express'
 import httpStatus from 'http-status'
+import config from '../../../config'
 import catchAsync from '../../../shared/catchAsync'
 import sendResponse from '../../../shared/sendResponse'
-import { IAdmin } from './admin.interface'
+import { IAdmin, ILoginAdminResponse } from './admin.interface'
 import { AdminService } from './admin.service'
 
 const createAdmin = catchAsync(async (req: Request, res: Response) => {
@@ -17,6 +18,25 @@ const createAdmin = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
+const loginAdmin = catchAsync(async (req: Request, res: Response) => {
+  const { ...loginData } = req.body
+  const result = await AdminService.loginAdmin(loginData)
+  const cookieOptions = {
+    secure: config.env === 'production',
+    httpOnly: true,
+  }
+
+  res.cookie('accessToken', cookieOptions)
+
+  sendResponse<ILoginAdminResponse>(res, {
+    statusCode: 200,
+    success: true,
+    message: 'User logged in successfully !',
+    data: result,
+  })
+})
+
 export const AdminController = {
   createAdmin,
+  loginAdmin,
 }
