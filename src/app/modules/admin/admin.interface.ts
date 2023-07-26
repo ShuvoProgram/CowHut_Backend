@@ -8,9 +8,9 @@ export type UserName = {
 
 export type IAdmin = {
   id: string
-  phoneNumber: string
   name: UserName
   role: string
+  phoneNumber: string
   password: string
   needsPasswordChange: boolean
   passwordChangedAt: Date
@@ -20,7 +20,7 @@ export type IAdmin = {
 
 export type AdminModel = {
   isUserExist(
-    id: string
+    phoneNumber: string
   ): Promise<
     Pick<
       IAdmin,

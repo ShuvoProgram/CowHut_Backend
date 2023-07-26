@@ -7,17 +7,6 @@ import { AdminModel, IAdmin } from './admin.interface'
 
 const AdminSchema: Schema<IAdmin> = new Schema(
   {
-    id: {
-      type: String,
-      auto: true,
-      unique: true,
-      required: true,
-    },
-    phoneNumber: {
-      type: String,
-      required: true,
-      unique: true,
-    },
     name: {
       type: {
         firstName: {
@@ -35,6 +24,11 @@ const AdminSchema: Schema<IAdmin> = new Schema(
       type: String,
       enum: [AdminRole.Admin],
       default: AdminRole.Admin,
+    },
+    phoneNumber: {
+      type: String,
+      required: true,
+      unique: true,
     },
     needsPasswordChange: {
       type: Boolean,

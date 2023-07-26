@@ -93,15 +93,11 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
     throw new ApiError(httpStatus.FORBIDDEN, 'Invalid Refresh Token')
   }
 
-  console.log(verifiedToken)
-
   // Extract the userId from the verifiedToken.
   const { userId } = verifiedToken
 
   // Check if the user with the extracted userId exists in the database.
   const isUserExist = await User.findById(userId)
-
-  console.log(isUserExist)
 
   if (!isUserExist) {
     // If the user does not exist, throw an ApiError with status 404 (NOT_FOUND).
@@ -111,7 +107,7 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
   // Generate a new access token using the jwtHelpers.createToken function.
   const newAccessToken = jwtHelpers.createToken(
     {
-      // id: isUserExist.id,
+      id: isUserExist.id,
       role: isUserExist.role,
     },
     config.jwt.secret as Secret,

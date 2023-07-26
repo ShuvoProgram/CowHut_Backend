@@ -33,18 +33,3 @@ export type UserModel = {
     savedPassword: string
   ): Promise<boolean>
 } & Model<IUser>
-
-export type UserModels = {
-  isUserFound(
-    id: string
-  ): Promise<
-    Pick<
-      IUser,
-      'id' | 'password' | 'role' | 'phoneNumber' | 'needsPasswordChange'
-    >
-  >
-  isPasswordMatched(
-    givenPassword: string,
-    savedPassword: string
-  ): Promise<boolean>
-} & Model<IUser>

@@ -35,15 +35,21 @@ const loginAdmin = async (
   }
 
   //create access token & refresh token
-  const { phoneNumber: ph, role, needsPasswordChange } = isUserExist
+  const { id: userId, role, needsPasswordChange } = isUserExist
   const accessToken = jwtHelpers.createToken(
-    { ph, role },
+    { userId, role },
+    config.jwt.refresh_secret as Secret,
+    config.jwt.refresh_expires_in as string
+  )
+  const refreshToken = jwtHelpers.createToken(
+    { userId, role },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string
   )
 
   return {
     accessToken,
+    refreshToken,
     needsPasswordChange,
   }
 }
