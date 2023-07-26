@@ -18,4 +18,6 @@ export type IRefreshTokenResponse = {
 export type IVerifiedLoginUser = {
   userId: string
   role: UserRole
+  token: string
+  expires: Date
 }

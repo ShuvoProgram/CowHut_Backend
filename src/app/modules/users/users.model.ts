@@ -80,10 +80,10 @@ userSchema.pre('save', async function (next) {
 })
 
 userSchema.statics.isUserExist = async function (
-  id: string
+  phoneNumber: string
 ): Promise<IUser | null> {
   return await User.findOne(
-    { id },
+    { phoneNumber },
     { id: 1, password: 1, role: 1, needsPasswordChange: 1 }
   )
 }
