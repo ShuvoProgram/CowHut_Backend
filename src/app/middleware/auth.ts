@@ -11,19 +11,21 @@ const auth =
   async (req: Request, res: Response, next: NextFunction) => {
     try {
       //get authorization token
-      const token = req.headers.authorization
+      const token = req.header('Authorization')?.replace('Bearer ', '') // Extract the token from the request header
       if (!token) {
         throw new ApiError(httpStatus.UNAUTHORIZED, 'You are not authorized')
       }
+
       //verify token
       let verifiedUser = null
 
+      console.log(token)
       verifiedUser = jwtHelpers.verifyToken(token, config.jwt.secret as Secret)
 
-      // req.user = verifiedUser
+      req.user = verifiedUser
 
       if (requiredRoles.length && !requiredRoles.includes(verifiedUser.role)) {
-        throw new ApiError(httpStatus.FORBIDDEN, 'Forbidden')
+        throw new ApiError(httpStatus.FORBIDDEN, 'Invalid Token')
       }
       next()
     } catch (error) {

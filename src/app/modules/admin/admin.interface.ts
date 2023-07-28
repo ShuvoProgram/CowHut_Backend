@@ -7,7 +7,7 @@ export type UserName = {
 }
 
 export type IAdmin = {
-  id: string
+  _id: string
   name: UserName
   role: string
   phoneNumber: string
@@ -24,7 +24,7 @@ export type AdminModel = {
   ): Promise<
     Pick<
       IAdmin,
-      'id' | 'password' | 'role' | 'phoneNumber' | 'needsPasswordChange'
+      '_id' | 'password' | 'role' | 'phoneNumber' | 'needsPasswordChange'
     >
   >
   isPasswordMatched(

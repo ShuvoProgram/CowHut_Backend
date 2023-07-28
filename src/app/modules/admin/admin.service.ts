@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import httpStatus from 'http-status'
 import { Secret } from 'jsonwebtoken'
 import config from '../../../config'
@@ -35,12 +36,13 @@ const loginAdmin = async (
   }
 
   //create access token & refresh token
-  const { id: userId, role, needsPasswordChange } = isUserExist
+  const { _id: userId, role, needsPasswordChange } = isUserExist
   const accessToken = jwtHelpers.createToken(
     { userId, role },
     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string
   )
+
   const refreshToken = jwtHelpers.createToken(
     { userId, role },
     config.jwt.refresh_secret as Secret,
@@ -90,6 +92,8 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
     config.jwt.expires_in as string
   )
 
+  console.log(verifiedToken)
+  console.log(newAccessToken)
   // Return the new access token in the response.
   return {
     accessToken: newAccessToken,

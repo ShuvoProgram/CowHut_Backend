@@ -9,9 +9,20 @@ router.get(
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
   UserController.getSingleUser
 )
-// router.get('/:id', UserController.getSingleUser)
-router.get('/', UserController.getAllUsers)
-router.delete('/:id', UserController.deleteUser)
-router.patch('/:id', UserController.updateUser)
+router.get(
+  '/',
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  UserController.getAllUsers
+)
+router.delete(
+  '/:id',
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  UserController.deleteUser
+)
+router.patch(
+  '/:id',
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  UserController.updateUser
+)
 
 export const UserRoutes = router

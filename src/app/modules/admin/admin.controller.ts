@@ -29,6 +29,8 @@ const loginAdmin = catchAsync(async (req: Request, res: Response) => {
   }
 
   res.cookie('refreshToken', refreshToken, cookieOptions)
+  // Attach the access token to the response headers
+  // res.header('Authorization', `Bearer ${refreshToken}`)
 
   sendResponse<ILoginAdminResponse>(res, {
     statusCode: 200,
@@ -60,6 +62,7 @@ const refreshToken = catchAsync(async (req: Request, res: Response) => {
 })
 
 const getSingleAdmin = catchAsync(async (req: Request, res: Response) => {
+  console.log(req.headers.authorization)
   const id = req.params.id
   const result = await AdminService.getSingleAdmin(id)
 
