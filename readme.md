@@ -4,9 +4,16 @@
 
 ### Application Routes:
 
-#### User
+ ### Auth (User)
+   - api/v1/auth/login (POST)
+   - api/v1/auth/signup (POST)
+   - api/v1/auth/refresh-token (POST)
 
-- api/v1/auth/signup (POST)
+   ### Auth (Admin)
+   - api/v1/admins/create-admin (POST)
+   - api/v1/admins/login (POST)
+
+#### User
 - api/v1/users (GET)
 - api/v1/users/648f0bd988b7c95731065442 (Single GET)
 - api/v1/users/648f0bd988b7c95731065442 (PATCH)
@@ -32,3 +39,15 @@
 
 - api/v1/orders/create-order (POST)
 - api/v1/orders (GET)
+
+ ## Bonus Part
+
+#### Admin
+   - api/v1/admins/create-admin (POST)
+
+#### My Profile
+- api/v1/users/my-profile (GET)
+- api/v1/users/my-profile (PATCH)
+
+#### Order:
+ - api/v1/orders/6177a5b87d32123f08d2f5d4 (GET)
