@@ -1,6 +1,6 @@
-# Digital Cow Hut Backend Assignment
+# Digital Cow Hut Backend Authentication Assignment
 
-### Live Link: https://cow-hut-ru16.onrender.com/
+### Live Link: https://cow-hut-auth-rho.vercel.app/
 
 ### Application Routes:
 
