@@ -25,6 +25,5 @@ router.patch(
   UserController.updateUser
 )
 
-router.get('/profile', auth(UserRole.Buyer, UserRole.Seller, UserRole.ADMIN), UserController.profileUser);
 
 export const UserRoutes = router

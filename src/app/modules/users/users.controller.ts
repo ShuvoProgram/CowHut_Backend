@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import { Request, Response } from 'express'
 import httpStatus from 'http-status'
 import catchAsync from '../../../shared/catchAsync'
@@ -59,21 +60,10 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
   })
 })
 
-const profileUser = catchAsync(async(req: Request, res: Response) => {
-  const result = await UserService.profileUse(req.body.user);
-
-  sendResponse<IUser>(res, {
-    statusCode: httpStatus.OK,
-    success: true,
-    message: 'Profile retrieve successfully !',
-    data: result,
-  })
-} )
 
 export const UserController = {
   getAllUsers,
   getSingleUser,
   updateUser,
-  deleteUser,
-  profileUser
+  deleteUser
 }
