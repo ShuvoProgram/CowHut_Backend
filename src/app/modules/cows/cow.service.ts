@@ -100,7 +100,10 @@ const getAllCow = async (
 
 //Get single user
 const getSingleCow = async (id: string): Promise<ICow | null> => {
-  const result = await Cow.findById(id)
+  const result = await Cow.findOne({ _id: id }).exec()
+  if (!result) {
+    throw new ApiError(httpStatus.NOT_FOUND, 'Cow Not Found')
+  }
   return result
 }
 

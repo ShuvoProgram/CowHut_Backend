@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import jwt, { JwtPayload, Secret } from 'jsonwebtoken'
 import { IAdmin } from '../app/modules/admin/admin.interface'
@@ -23,14 +24,30 @@ export const generateRefreshToken = (admin: IAdmin): string => {
   return refreshToken
 }
 
-const verifyToken = (token: string, secret: Secret): JwtPayload => {
-  return jwt.verify(token, secret) as JwtPayload
-}
+// const verifyToken = (token: string, secret: Secret): JwtPayload => {
+//   return jwt.verify(token, secret) as JwtPayload
+// }
 
-// Function to verify the token
-export const verifyTokens = (token: string, secret: string): any => {
-  return jwt.verify(token, secret)
-}
+// // Function to verify the token
+// export const verifyTokens = (token: string, secret: string): any => {
+//   return jwt.verify(token, secret)
+// }
+
+// const verifyToken = (token: string, secret: Secret): JwtPayload | null => {
+//   try {
+//     const decoded = jwt.verify(token, secret);
+//     console.log(decoded);
+//     return decoded as JwtPayload;
+//   } catch (error) {
+//     // Handle the verification error, such as invalid signature, token expired, etc.
+//     console.error('Token verification failed:', error);
+//     return null;
+//   }
+// }
+
+const verifyToken = (token: string, secret: Secret): JwtPayload => {
+  return jwt.verify(token, secret) as JwtPayload;
+};
 
 export const jwtHelpers = {
   createToken,

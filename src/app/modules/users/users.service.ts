@@ -68,9 +68,18 @@ const deleteUser = async (id: string): Promise<IUser | null> => {
   return result
 }
 
+const profileUse = async (id: string): Promise<IUser | null> => {
+  const isExist = await User.findById(id);
+  if(!isExist) {
+    throw new ApiError(httpStatus.NOT_FOUND, "User Not Found");
+  }
+  return isExist;
+}
+
 export const UserService = {
   getAllUsers,
   getSingleUser,
   updateUser,
   deleteUser,
+  profileUse
 }

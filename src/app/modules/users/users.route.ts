@@ -11,7 +11,7 @@ router.get(
 )
 router.get(
   '/',
-  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  auth(UserRole.ADMIN, UserRole.SUPER_ADMIN),
   UserController.getAllUsers
 )
 router.delete(
@@ -24,5 +24,7 @@ router.patch(
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
   UserController.updateUser
 )
+
+router.get('/profile', auth(UserRole.Buyer, UserRole.Seller, UserRole.ADMIN), UserController.profileUser);
 
 export const UserRoutes = router
