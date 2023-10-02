@@ -25,7 +25,7 @@ const moduleRoutes = [
     route: OrderRoutes,
   },
   {
-    path: '/admin',
+    path: '/admins',
     route: AdminRoutes,
   },
 ]
