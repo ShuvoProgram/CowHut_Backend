@@ -4,7 +4,7 @@ import auth from '../../middleware/auth';
 import { OrderController } from './order.controller';
 const router = express.Router();
 
-router.post('/create-order',auth(UserRole.Buyer), OrderController.createOrder);
+router.post('/',auth(UserRole.Buyer), OrderController.createOrder);
 router.get('/', auth(UserRole.ADMIN, UserRole.SUPER_ADMIN, UserRole.Buyer, UserRole.Seller), OrderController.getAllOrder);
 export const OrderRoutes = router;
 
