@@ -62,12 +62,12 @@ const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
 
   const accessToken = jwtHelpers.createToken(
     { userId, role },
-    config.jwt.refresh_secret as Secret,
-    config.jwt.refresh_expires_in as string
+    config.jwt.secret as Secret,
+    config.jwt.expires_in as string
   )
   const refreshToken = jwtHelpers.createToken(
     { userId, role },
-    config.jwt.refresh_secret as Secret,
+     config.jwt.refresh_secret as Secret,
     config.jwt.refresh_expires_in as string
   )
 
@@ -110,8 +110,8 @@ const refreshToken = async (token: string): Promise<IRefreshTokenResponse> => {
       id: isUserExist.id,
       role: isUserExist.role,
     },
-    config.jwt.secret as Secret,
-    config.jwt.expires_in as string
+    config.jwt.refresh_secret as Secret,
+    config.jwt.refresh_expires_in as string
   )
 
   // Return the new access token in the response.

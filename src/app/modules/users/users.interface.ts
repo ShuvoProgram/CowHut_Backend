@@ -19,6 +19,11 @@ export type IUser = {
   admin?: Types.ObjectId | IAdmin
 }
 
+export type IProfile = {
+  userId: string;
+  role: string;
+}
+
 export type UserModel = {
   isUserExist(
     phoneNumber: string

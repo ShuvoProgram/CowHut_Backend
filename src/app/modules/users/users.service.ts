@@ -3,6 +3,7 @@ import httpStatus from 'http-status'
 import ApiError from '../../../error/ApiError'
 import { IUser } from './users.interface'
 import { User } from './users.model'
+import isUserFound from './users.utilis'
 
 //get all users
 
@@ -58,7 +59,6 @@ const updateUser = async (
 }
 
 // Delete user
-
 const deleteUser = async (id: string): Promise<IUser | null> => {
   const isExist = await User.findById(id)
   if (!isExist) {
@@ -68,17 +68,41 @@ const deleteUser = async (id: string): Promise<IUser | null> => {
   return result
 }
 
-// const profileUse = async (id: string): Promise<IUser | null> => {
-//   const isExist = await User.findById(id);
-//   if(!isExist) {
-//     throw new ApiError(httpStatus.NOT_FOUND, "User Not Found");
-//   }
-//   return isExist;
-// }
+const profileUser = async (id: string): Promise<IUser | null> => {
+  if(!(await isUserFound(id))) {
+    throw new ApiError(400, "User not found");
+  };
+
+  const data = await User.findById(id);
+  return data;
+}
+
+const updateProfile = async (_id: string, payload: IUser): Promise<IUser | null> => {
+  if(!(await isUserFound(_id))) {
+    throw new ApiError(400, "User not found");
+  };
+
+  const {name, ...userData} = payload;
+  if (name && Object.keys(name).length) {
+    Object.keys(name).map((field) => {
+      const nameKey = `name.${field}`;
+      (userData as any)[nameKey] = name[field as keyof typeof name];
+    });
+  }
+
+  const data = await User.findOneAndUpdate({_id}, userData, {
+    new: true,
+    runValidators: true
+  });
+
+  return data;
+}
 
 export const UserService = {
   getAllUsers,
   getSingleUser,
   updateUser,
-  deleteUser
+  deleteUser,
+  profileUser,
+  updateProfile
 }
