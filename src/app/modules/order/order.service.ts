@@ -5,6 +5,11 @@ import { Cow } from '../cows/cow.model'
 import { User } from '../users/users.model'
 import { IOrder } from './order.interface'
 import { Order } from './order.model'
+import { IPaginationOptions } from '../../../interfaces/pagination'
+import { paginationHelpers } from '../../../helper/paginationHelper'
+import { IGenericResponse } from '../../../interfaces/common'
+import { UserRole } from '../../../enums/users'
+import { getOrderDetailsForSeller, getOrderForBuyer, getOrderWithDefaultPopulation } from './order.utils'
 
 const createOrder = async (payload: IOrder): Promise<IOrder | null> => {
   const session: ClientSession = await mongoose.startSession()
@@ -73,12 +78,115 @@ const createOrder = async (payload: IOrder): Promise<IOrder | null> => {
 }
 
 //Get all user
-const getAllOrder = async (): Promise<IOrder[] | null> => {
-  const result = await Order.find({}).populate('cow').populate('buyer')
-  return result
+const getAllOrder = async (userId: string, role: string, paginationOptions: IPaginationOptions): Promise<IGenericResponse<IOrder[]> | null> => {
+  const {page, limit, skip, sortBy, sortOrder} = paginationHelpers.calculatePagination(paginationOptions);
+
+  const sortCondition = {[sortBy]: sortOrder};
+
+  let data: IOrder[];
+
+  if (role === "seller") {
+    data = await Order.aggregate([
+      {
+        $lookup: {
+          from: "cows",
+          localField: "cow",
+          foreignField: "_id",
+          as: "cow",
+        },
+      },
+      {
+        $unwind: "$cow",
+      },
+      {
+        $match: { "cow.seller": userId },
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "cow.seller",
+          foreignField: "_id",
+          as: "cow.seller",
+        },
+      },
+      {
+        $unwind: "$cow.seller",
+      },
+      {
+        $lookup: {
+          from: "users",
+          localField: "buyer",
+          foreignField: "_id",
+          as: "buyer",
+        },
+      },
+      {
+        $unwind: "$buyer",
+      },
+      {
+        $skip: skip,
+      },
+      {
+        $limit: limit,
+      },
+    ]);
+  } else if (role === "buyer") {
+    data = await Order.find({ buyer: userId })
+      .populate("buyer")
+      .populate({ path: "cow", populate: { path: "seller" } })
+      .sort(sortCondition)
+      .skip(skip)
+      .limit(limit);
+  } else {
+    data = await Order.find()
+      .populate("buyer")
+      .populate({ path: "cow", populate: { path: "seller" } })
+      .sort(sortCondition)
+      .skip(skip)
+      .limit(limit);
+  }
+
+  const total = await Order.countDocuments();
+  const meta = { page, limit, total };
+  return { meta: meta, data };
 }
+
+const getOrder = async (_id: string, role: string, userId: string): Promise<IOrder | null> => {
+  // Find the order by _id and populate the "cow" field
+  const order = await Order.findById(_id).populate("cow");
+
+  if (!order) {
+    throw new ApiError(400, "Order not found!");
+  }
+
+  // Convert _id to a mongoose ObjectId
+  const orderId = new mongoose.Types.ObjectId(_id);
+
+  let data: IOrder | null;
+
+  if (role === UserRole.Seller) {
+    // For Sellers, perform aggregation to fetch the order details
+    data = await getOrderDetailsForSeller(orderId, userId);
+  } else if (role === UserRole.Buyer) {
+    // For Buyers, fetch the order with buyer matching
+    data = await getOrderForBuyer(_id, userId);
+  } else {
+    // For other roles, fetch the order with default population
+    data = await getOrderWithDefaultPopulation(_id);
+  }
+
+  if (!data) {
+    throw new ApiError(httpStatus.BAD_REQUEST, "Unauthorized access!");
+  }
+
+  return data;
+};
+
+
+
 
 export const OrderService = {
   createOrder,
   getAllOrder,
+  getOrder
 }

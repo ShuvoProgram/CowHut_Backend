@@ -65,7 +65,6 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
 const ProfileUser = async (req: Request, res: Response): Promise<void> => {
   try {
     const userId = req?.user?.userId;
-    console.log(req.user)
     const result = await UserService.profileUser(userId)
    sendResponse<IUser>(res, {
     statusCode: httpStatus.OK,
