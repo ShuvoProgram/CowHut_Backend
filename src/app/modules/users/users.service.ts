@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import httpStatus from 'http-status'
 import ApiError from '../../../error/ApiError'
@@ -77,8 +78,8 @@ const profileUser = async (id: string): Promise<IUser | null> => {
   return data;
 }
 
-const updateProfile = async (_id: string, payload: IUser): Promise<IUser | null> => {
-  if(!(await isUserFound(_id))) {
+const updateProfile = async (userId: string, payload: IUser): Promise<IUser | null> => {
+  if(!(await isUserFound(userId))) {
     throw new ApiError(400, "User not found");
   };
 
@@ -90,7 +91,7 @@ const updateProfile = async (_id: string, payload: IUser): Promise<IUser | null>
     });
   }
 
-  const data = await User.findOneAndUpdate({_id}, userData, {
+  const data = await User.findByIdAndUpdate(userId, userData, {
     new: true,
     runValidators: true
   });

@@ -1,10 +1,10 @@
 import cors from 'cors'
 import express, { Application, NextFunction, Request, Response } from 'express'
-import httpStatus from 'http-status'
 import globalErrorHandler from './app/middleware/globalErrorHandler'
 import router from './app/routes'
 
 import cookieParser from 'cookie-parser'
+import httpStatus from 'http-status'
 
 const app: Application = express()
 
@@ -18,10 +18,10 @@ app.use(express.urlencoded({ extended: true }))
 // Application routes
 app.use('/api/v1', router)
 
-//testing
-app.get('/api/v1', async (req: Request, res: Response) => {
-  res.send('Working Successfully')
-})
+// Health Check
+app.get("/", (req: Request, res: Response) => {
+  res.send("Hello from Digital Cow Hut! 🐮");
+});
 
 //global error handler
 app.use(globalErrorHandler)

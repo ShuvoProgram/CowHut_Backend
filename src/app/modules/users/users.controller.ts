@@ -64,7 +64,8 @@ const deleteUser = catchAsync(async (req: Request, res: Response) => {
 
 const ProfileUser = async (req: Request, res: Response): Promise<void> => {
   try {
-    const userId = req?.user?._id;
+    const userId = req?.user?.userId;
+    console.log(req.user)
     const result = await UserService.profileUser(userId)
    sendResponse<IUser>(res, {
     statusCode: httpStatus.OK,
@@ -74,6 +75,7 @@ const ProfileUser = async (req: Request, res: Response): Promise<void> => {
   });
 
   } catch (error) {
+    console.log(error)
      res.status(500).json({
       message: "Internal Server Error"
     })
@@ -81,9 +83,8 @@ const ProfileUser = async (req: Request, res: Response): Promise<void> => {
 };
 
 const updateProfile = catchAsync(async(req, res) => {
-  const id = req.params.id;
+  const id = req?.user?.userId;
   const userData = req.body;
-
   const result = await UserService.updateProfile(id, userData);
 
   sendResponse<IUser>(res, {
