@@ -64,20 +64,28 @@ const userSchema = new Schema(
   }
 )
 
-// User.create() / user.save()
+// Pre-save hook for password hashing and other modifications
 userSchema.pre('save', async function (next) {
-  //hashing user password
-  const user = this
+  // If the password has not been modified, continue
+  if (!this.isModified("password")) return next();
+
+  const user = this;
+
+  // Hashing user password
   user.password = await bcrypt.hash(
     user.password,
-    Number(config.bycrypt_salt_rounds)
-  )
+    Number(config.bycrypt_salt_rounds) // Make sure config.bycrypt_salt_rounds is a valid number
+  );
 
-  if (!user.needsPasswordChange) {
-    user.passwordChangedAt = new Date()
+  // user.passwordConfirm = undefined;
+
+  // Update passwordChangedAt if it's not set
+  if (!user.passwordChangedAt) {
+    user.passwordChangedAt = new Date();
   }
-  next()
-})
+
+  next();
+});
 
 userSchema.statics.isUserExist = async function (
   phoneNumber: string

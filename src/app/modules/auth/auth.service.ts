@@ -19,19 +19,19 @@ const createUser = async (user: IUser): Promise<IUser | null> => {
     user.password = config.default_user_pass as string
   }
 
-  if (user.role == 'seller' && (user.budget !== 0 || user.income)) {
-    throw new ApiError(
-      httpStatus.BAD_REQUEST,
-      'Seller initial budget and income should be 0 !'
-    )
-  }
+  // if (user.role == 'seller' && (user.budget !== 0 || user.income)) {
+  //   throw new ApiError(
+  //     httpStatus.BAD_REQUEST,
+  //     'Seller initial budget and income should be 0 !'
+  //   )
+  // }
 
-  if (user.role == 'buyer' && (user.budget === 0 || user.income !== 0)) {
-    throw new ApiError(
-      httpStatus.BAD_REQUEST,
-      'Buyer initial budget and income more then 0, and income should be 0 !'
-    )
-  }
+  // if (user.role == 'buyer' && (user.budget === 0 || user.income !== 0)) {
+  //   throw new ApiError(
+  //     httpStatus.BAD_REQUEST,
+  //     'Buyer initial budget and income more then 0, and income should be 0 !'
+  //   )
+  // }
 
   const createdUser = await User.create(user)
 
@@ -56,7 +56,6 @@ const loginUser = async (payload: ILoginUser): Promise<ILoginUserResponse> => {
   ) {
     throw new ApiError(httpStatus.UNAUTHORIZED, 'Password is incorrect')
   }
-
   //create access token & refresh token
   const { id: userId, role, needsPasswordChange } = isUserExist
 

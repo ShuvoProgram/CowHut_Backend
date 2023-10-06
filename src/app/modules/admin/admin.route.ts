@@ -6,7 +6,7 @@ const router = express.Router()
 
 router.post('/create-admin', AdminController.createAdmin)
 router.post('/login', AdminController.loginAdmin)
-router.post('/refresh-token', AdminController.refreshToken)
+// router.post('/refresh-token', AdminController.refreshToken)
 router.get(
   '/:id',
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),

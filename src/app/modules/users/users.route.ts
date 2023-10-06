@@ -15,6 +15,12 @@ router.get('/my-profile',auth(UserRole.ADMIN, UserRole.Seller, UserRole.Buyer), 
 
 router.patch('/my-profile',auth(UserRole.ADMIN, UserRole.Seller, UserRole.Buyer), UserController.updateProfile);
 
+router.patch(
+  '/:id',
+  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
+  UserController.updateUser
+)
+
 router.get(
   '/:id',
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
@@ -26,10 +32,6 @@ router.delete(
   auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
   UserController.deleteUser
 )
-router.patch(
-  '/:id',
-  auth(UserRole.SUPER_ADMIN, UserRole.ADMIN),
-  UserController.updateUser
-)
+
 
 export const UserRoutes = router

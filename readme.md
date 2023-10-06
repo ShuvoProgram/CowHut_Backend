@@ -21,7 +21,7 @@
 
 #### Cows
 
-- api/v1/cows/create-cow (POST)
+- api/v1/cows (POST)
 - api/v1/cows (GET)
 - api/v1/cows/648f0d5188b7c9573106548a (Single GET)
 - api/v1/cows/648f0d5188b7c9573106548a (PATCH)
@@ -37,7 +37,7 @@
 
 #### Orders
 
-- api/v1/orders/create-order (POST)
+- api/v1/orders (POST)
 - api/v1/orders (GET)
 
  ## Bonus Part

@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 import httpStatus from 'http-status'
 import mongoose, { ClientSession } from 'mongoose'
 import ApiError from '../../../error/ApiError'
@@ -32,7 +33,7 @@ const createOrder = async (payload: IOrder): Promise<IOrder | null> => {
         'Sellers can not make orders !'
       )
     }
-
+    
     if (BuyerData.budget < cowData.price) {
       throw new ApiError(
         httpStatus.BAD_REQUEST,
