@@ -32,8 +32,13 @@ const updateUser = async (
   }
 
   const {name, ...userData} = payload;
+  if (name && Object.keys(name).length) {
+    Object.keys(name).map((field) => {
+      const nameKey = `name.${field}`;
+      (userData as any)[nameKey] = name[field as keyof typeof name];
+    });
+  }
   
-
   // Ensure the role is either 'buyer' or 'seller'
   if (!['buyer', 'seller'].includes(payload.role || existingUser.role)) {
     throw new ApiError(
@@ -47,11 +52,6 @@ const updateUser = async (
     throw new ApiError(httpStatus.BAD_REQUEST, 'Buyer income should be 0.');
   } else if (payload.role === 'seller' && payload.budget !== undefined && payload.budget > 0) {
     throw new ApiError(httpStatus.BAD_REQUEST, 'Seller budget should be 0.');
-  }
-
-  // Update user data including the name
-  if (name) {
-    existingUser.name = { ...existingUser.name, ...name };
   }
 
   // Update other user data
